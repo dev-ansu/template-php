@@ -1,0 +1,3 @@
+<footer>
+    rodapé
+</footer>

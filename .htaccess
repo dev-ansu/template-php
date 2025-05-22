@@ -1,0 +1,37 @@
+# Impede acesso direto à pasta app/
+RewriteEngine On
+
+# Bloqueia qualquer tentativa de acessar /app ou subpastas
+RewriteRule ^app(/|$) - [F,L]
+RewriteRule ^config(/|$) - [F,L]
+RewriteRule ^(storage|logs|vendor)(/|$) - [F,L]
+
+# Redireciona tudo para public/index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
+
+# Bloqueia acesso a arquivos sensíveis
+<FilesMatch "\.(env|ini|log|yml|sql|sh|bak|htaccess)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "^(composer\.(json|lock)|package\.json|webpack\.config\.js)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+Header always set X-Content-Type-Options "nosniff"
+Header always set X-Frame-Options "DENY"
+Header always set X-XSS-Protection "1; mode=block"
+
+<LimitExcept GET POST>
+    Deny from all
+</LimitExcept>
+
+# Protege o diretório .git
+RedirectMatch 404 /\.git
+
+# Bloqueia listagem de diretórios
+Options -Indexes

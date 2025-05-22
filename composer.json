@@ -1,0 +1,20 @@
+{
+    "name": "servidorouro/template",
+    "autoload": {
+        "psr-4": {
+            "app\\":"app/"
+        },
+        "files":[
+            "src/helpers/functions.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Anderson Souza",
+            "email": "dev.andersondesouzafeitosa@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
