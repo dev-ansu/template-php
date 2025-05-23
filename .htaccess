@@ -17,7 +17,7 @@ RewriteRule ^ index.php [QSA,L]
     Deny from all
 </FilesMatch>
 
-<FilesMatch "^(composer\.(json|lock)|package\.json|webpack\.config\.js)$">
+<FilesMatch "^(phinx.php|composer\.(json|lock)|package\.json|webpack\.config\.js)$">
     Order allow,deny
     Deny from all
 </FilesMatch>

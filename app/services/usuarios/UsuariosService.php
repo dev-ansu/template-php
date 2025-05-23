@@ -7,5 +7,4 @@ use app\core\DBManager;
 class UsuariosService extends DBManager{
     
     
-
 }
