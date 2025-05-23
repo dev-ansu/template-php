@@ -12,15 +12,15 @@
             <div class="flex flex-col flex-1">
                 <label for="" class="text-gray-600">E-mail:</label>
                 <input  type="email" name="email" value="" class="outline-none border-1 border-orange-500 rounded px-2 py-1" placeholder="Digite seu e-mail">
-                <?= getFlash("email.required") ?>
-                <?= getFlash("email.notNull") ?>
+                <?= getFlash("email.required", true) ?>
+                <?= getFlash("email.notNull", true) ?>
             </div>
 
             <div class="flex flex-col flex-1">
                 <label for="" class="text-gray-600">Senha:</label>
                 <input  type="password" name="senha" value="" class="outline-none border-1 border-orange-500 rounded px-2 py-1" placeholder="Digite seu e-mail">
-                <?= getFlash("senha.required") ?>
-                <?= getFlash("senha.notNull") ?>
+                <?= getFlash("senha.required", true) ?>
+                <?= getFlash("senha.notNull", true) ?>
 
             </div>
         </div>

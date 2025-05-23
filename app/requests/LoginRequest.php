@@ -6,7 +6,7 @@ use app\requests\Request;
 class LoginRequest extends Request{
 
     public function __construct(){
-        parent::__construct($this);
+        parent::__construct();
     }
 
     public function authorize(){

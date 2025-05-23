@@ -8,15 +8,9 @@ class Request extends Validate{
 
     private $data;
 
-    public function __construct(Request $req){
-        if($req instanceof Request){
-            if(strtolower($_SERVER['REQUEST_METHOD']) == 'get'){
-                self::$method = $_GET;
-            }elseif(strtolower($_SERVER['REQUEST_METHOD']) == 'post'){
-                self::$method= $_POST;
-            }
-            self::$request = $req;
-        }
+    public function __construct(){
+        self::$method = $_SERVER['REQUEST_METHOD'] === 'GET' ? $_GET : $_POST;
+        self::$request = $this;
     }
 
     public function data(){
@@ -26,6 +20,12 @@ class Request extends Validate{
     public function validated(){
         if(Validate::$request->authorize()){
             $validate = $this->validate(Validate::$request->rules());
+            
+            if(!$validate){
+                self::setFlashMessages(); // Garante que as mensagens estarão disponíveis.
+                return null;
+            }
+
             $this->data = $validate;
             return $this;
         }else{

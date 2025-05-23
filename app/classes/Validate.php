@@ -1,11 +1,10 @@
 <?php
 namespace app\classes;
 
-use app\models\DAO;
-use app\requests\Request;
+use app\core\Model;
 use DateTime;
 
-class Validate{
+class Validate extends Model{
     
     protected static array $errors = [];
     protected static $method;
@@ -260,54 +259,9 @@ class Validate{
         return $data;
     }
 
-    private static function unique($field, $param){
-        $campo = isset($_POST[$field]) ? strip_tags($_POST[$field]):strip_tags($_GET[$field]);
-        if($campo){
-            $params = explode("-", $param);
-          
-            $usuario = new DAO($params[0], $params[1], data:[$field => $campo], conditions:[$field => " = :$field"]);
-            $existe = $usuario->fetch();
-        
-            if($existe){
-                setFlash($field, "Este dado já está cadastrado em nosso banco de dados.");
-                return false;
-            }        
-        }
-        return $campo;
-    }
 
     private static function image($field, $param){
         $filename = $_FILES[$field];
-    }
-
-    private static function existe($field, $param){
-
-        $campo = isset($_REQUEST[$field]) ? $_REQUEST[$field]:'';
-              
-        if($campo){
-            $params = explode("-", $param);
-            
-            if(str_contains($params[1],'~')){
-                $params2 = explode("~", $params[1]);
-                $usuario = new DAO($params[0], $params2[0], data:[$params2[1] => $campo], conditions:[$params2[1] => " = :".$params2[1]]);
-                $existe = $usuario->fetch();
-                if(!$existe){
-                    setFlash($field, "Este {$field} não está cadastrado no nosso banco de dados.");
-                    return false;
-                } 
-            }else{
-                $usuario = new DAO($params[0], $params[1], data:[$field => $campo], conditions:[$field => " = :".$field]);
-                $existe = $usuario->fetch();
-                if(!$existe){
-                    setFlash($field, "Este {$field} não está cadastrado no nosso banco de dados.");
-                    return false;
-                }  
-            }
-        }else{
-            setFlash($field, "Nenhum valor foi passado para este campo.");
-            return false;
-        }              
-        return $campo;
     }
 
 

@@ -21,15 +21,9 @@ class LoginController{
             }
             $request = (new LoginRequest)->validated();
            
-            if(count($request->errors()) > 0){
-                $errors = $request->errors();
-
-                foreach($errors as $key => $error){
-                    setFlash("$key.required", $error['required']);
-                    setFlash("$key.required", $error['notNull']);
-                }
- 
+            if(!$request){
                 redirect();
+                exit;
             }
             $data = $request->data();
             $user = (new AuthService)->execute($data);
