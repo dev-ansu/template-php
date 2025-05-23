@@ -48,6 +48,8 @@ function setFlash(string $key, string $message, string $type = "danger"){
  * @return void
  */
 
+
+
 function getFlash($key){
 
     if(!empty($_SESSION[$key])){
@@ -59,77 +61,112 @@ function getFlash($key){
         $message = $flash['message'];
         $type = $flash['type'];
 
+        $message = htmlspecialchars($flash['message'], ENT_QUOTES, 'UTF-8');
+        $type = htmlspecialchars($flash['type'], ENT_QUOTES, 'UTF-8');
+        
+        // Define CSS e JS apenas na primeira vez
+        static $assetsLoaded = false;
+
+        $styles = '';
+        $scripts = '';
+
+        if (!$assetsLoaded) {
+            $assetsLoaded = true;
+
+            $styles = <<<STYLE
+                <style>
+                    .alert {
+                        width: auto;
+                        height: auto;
+                        padding: 15px 10px;
+                        display: flex;
+                        border-radius: 10px;
+                        align-items: center;
+                        justify-content: space-between;
+                        font-size: 16px;
+                        font-family: sans-serif;
+                        margin-bottom: 10px;
+                    }
+
+                    .alert.alert-danger {
+                        background: #f8d7da;
+                        color: #7f4159;
+                    }
+
+                    .alert.alert-success {
+                        background: #d4ecdb;
+                        color: #32643c;
+                    }
+
+                    .alert.alert-primary {
+                        background: #cde5fe;
+                        color: #8f6941;
+                    }
+
+                    .alert.alert-warning {
+                        background: #fef3cc;
+                        color: #8f6941;
+                    }
+
+                    .btn-close-alert::before {
+                        content: "X";
+                    }
+
+                    .btn-close-alert {
+                        display: block;
+                        cursor: pointer;
+                        background-color: transparent;
+                        outline: none;
+                        border: 1px solid transparent;
+                        padding: 5px 10px;
+                        border-radius: 4px;
+                        transition: all 0.4s ease;
+                    }
+
+                    .btn-close-alert:hover {
+                        background: #ccc;
+                    }
+                </style>
+            STYLE;
+
+            $scripts = <<<SCRIPT
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        document.querySelectorAll('.btn-close-alert').forEach(function (btn) {
+                            btn.addEventListener('click', function () {
+                                const alert = this.closest('.alert')
+                                if(alert) { alert.remove() };
+                                const container = document.querySelector(".alert-container");
+                                if(container && container.children.length < 3){
+                                    container.remove()
+                                }
+                            });
+                        });
+                    });
+                </script>
+            SCRIPT;
+        }
+
         $html = <<<HTML
-            <style>
-                .alert{
-                    width: auto;
-                    height: auto;
-                    padding: 15px 10px;
-                    display: flex;
-                    border-radius: 10px;
-                    align-items: center;
-                    justify-content: space-between;
-                    font-size: 16px;
-                    font-family: sans-serif;
-                }
-
-                .alert.alert-danger{
-                    background: #f8d7da;
-                    color: #7f4159;
-                }
-
-                .alert.alert-success{
-                    background: #d4ecdb;
-                    color: #32643c;
-                }
-
-                .alert.alert-primary{
-                    background: #cde5fe;
-                    color: #8f6941;
-                }
-
-                .alert.alert-warning{
-                    background: #fef3cc;
-                    color:#8f6941;
-                }
-
-                .btn-close-alert::before{
-                    content:"X";
-                }
-                .btn-close-alert{
-                    display: block;
-                    cursor: pointer;
-                    background-color: transparent;
-                    outline: none;
-                    border: 1px solid transparent;
-                    padding: 5px 10px;
-                    border-radius: 4px;
-                    transition: all 0.4s ease;
-                }
-
-                .btn-close-alert:hover{
-                    background: #ccc;
-                }
-                
-            </style>
+            {$styles}
             <span class="alert alert-{$type}">
-                <span>$message</span>
-                <button class='btn-close-alert'>
-                    
-                </button>
+                <span>{$message}</span>
+                <span class="btn-close-alert"></span>
             </span>
-
-            <script>
-                const btnCloseAlert = document.querySelectorAll(".btn-close-alert")
-                function onClose(e){
-                    e.preventDefault();
-                    e.target.parentElement.remove();
-                }
-                btnCloseAlert.forEach(btn => btn.addEventListener("click",onClose))
-            </script>
-        HTML;        
+            {$scripts}
+        HTML;
 
         return $html;
     }
 
+}
+
+/**
+ * Redireciona o usuário para um link interno do site
+ * @param string $to - url de destino
+ * @return void
+ */
+function redirect(string | null $to = null): void{
+    header("location: " . BASE_URL . $to);
+    die;
 }

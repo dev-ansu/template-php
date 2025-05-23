@@ -21,7 +21,7 @@ class Controller{
             }
 
             extract($viewData);
-
+            
             include  VIEWS_PATH . $viewName . ".php";
 
         }catch(Exception $e){
