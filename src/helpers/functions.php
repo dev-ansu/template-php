@@ -50,7 +50,7 @@ function setFlash(string $key, string $message, string $type = "danger"){
 
 
 
-function getFlash($key){
+function getFlash($key, $onlyText = false){
 
     if(!empty($_SESSION[$key])){
 
@@ -72,62 +72,91 @@ function getFlash($key){
 
         if (!$assetsLoaded) {
             $assetsLoaded = true;
+            if(!$onlyText){
 
-            $styles = <<<STYLE
-                <style>
-                    .alert {
-                        width: auto;
-                        height: auto;
-                        padding: 15px 10px;
-                        display: flex;
-                        border-radius: 10px;
-                        align-items: center;
-                        justify-content: space-between;
-                        font-size: 16px;
-                        font-family: sans-serif;
-                        margin-bottom: 10px;
-                    }
+                $styles = <<<STYLE
+                    <style>
+                        .alert {
+                            width: auto;
+                            height: auto;
+                            padding: 15px 10px;
+                            display: flex;
+                            border-radius: 10px;
+                            align-items: center;
+                            justify-content: space-between;
+                            font-size: 16px;
+                            font-family: sans-serif;
+                            margin-bottom: 10px;
+                        }
 
-                    .alert.alert-danger {
-                        background: #f8d7da;
-                        color: #7f4159;
-                    }
+                        .alert.alert-danger {
+                            background: #f8d7da;
+                            color: #7f4159;
+                        }
 
-                    .alert.alert-success {
-                        background: #d4ecdb;
-                        color: #32643c;
-                    }
+                        .alert.alert-success {
+                            background: #d4ecdb;
+                            color: #32643c;
+                        }
 
-                    .alert.alert-primary {
-                        background: #cde5fe;
-                        color: #8f6941;
-                    }
+                        .alert.alert-primary {
+                            background: #cde5fe;
+                            color: #8f6941;
+                        }
 
-                    .alert.alert-warning {
-                        background: #fef3cc;
-                        color: #8f6941;
-                    }
+                        .alert.alert-warning {
+                            background: #fef3cc;
+                            color: #8f6941;
+                        }
 
-                    .btn-close-alert::before {
-                        content: "X";
-                    }
+                        .btn-close-alert::before {
+                            content: "X";
+                        }
 
-                    .btn-close-alert {
-                        display: block;
-                        cursor: pointer;
-                        background-color: transparent;
-                        outline: none;
-                        border: 1px solid transparent;
-                        padding: 5px 10px;
-                        border-radius: 4px;
-                        transition: all 0.4s ease;
-                    }
+                        .btn-close-alert {
+                            display: block;
+                            cursor: pointer;
+                            background-color: transparent;
+                            outline: none;
+                            border: 1px solid transparent;
+                            padding: 5px 10px;
+                            border-radius: 4px;
+                            transition: all 0.4s ease;
+                        }
 
-                    .btn-close-alert:hover {
-                        background: #ccc;
-                    }
-                </style>
-            STYLE;
+                        .btn-close-alert:hover {
+                            background: #ccc;
+                        }
+                    </style>
+                STYLE;
+            }else{
+                $styles =<<<STYLE
+                    <style>
+                        .alert {
+                            width: auto;
+                            height: auto;
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            font-family: sans-serif;
+                        }
+
+                        .btn-close-alert::before {
+                            content: "X";
+                        }
+
+                        .btn-close-alert {
+                            display: block;
+                            cursor: pointer;
+                            background-color: transparent;
+                            outline: none;
+                            border: 1px solid transparent;
+                        }
+
+
+                        </style>
+                STYLE;
+            }
 
             $scripts = <<<SCRIPT
                 <script>
