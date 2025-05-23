@@ -3,6 +3,7 @@ namespace app\core;
 
 
 class Router{
+    
     private static array $routes = [];
     
     public static function get(string $route, string $action, array $middlewares = []):void{
@@ -37,7 +38,7 @@ class Router{
     }
 
     public static function resolve(string $url, string $requestMethod): ?array{
-    
+        
         foreach(self::$routes[$requestMethod] as $route => $action){
           
             // Converte "{id:\d+}" em "(?P<id>\d+)" e "{slug}" em "(?P<slug>[^/]+)"

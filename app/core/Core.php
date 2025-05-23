@@ -89,15 +89,20 @@ class Core{
 
         // $this->params = $url;
 
-        call_user_func_array([$controllerInstance, $this->method], $this->params);
+        call_user_func_array([new $this->controller, $this->method], $this->params);
 
     }
 
     private function parseUrl(): array {
         $url = $_SERVER['REQUEST_URI'];
-        $base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/'); // Adapta para subdiretórios
-        $basePattern = preg_quote($base, '#');
-        $url = preg_replace("#^{$basePattern}#", "", $url);
+        $basePath = parse_url(BASE_URL, PHP_URL_PATH);
+        
+        $base = $basePath ? rtrim($basePath, '/'):''; // Adapta para subdiretórios
+
+        if($base !== ''){
+            $basePattern = preg_quote($base, '#');
+            $url = preg_replace("#^{$basePattern}#", "", $url);
+        }
         $url = explode("?", $url)[0];
         $url = trim($url, "/");
         return $url ? array_filter(explode("/", $url)) : [];

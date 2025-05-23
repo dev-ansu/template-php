@@ -1,11 +1,11 @@
 <?php
 
 use app\core\Router;
-use app\middlewares\AuthMIddleware;
+use app\middlewares\AuthMiddleware;
 
 Router::group([
     'prefix' => '/dashboard',
-    'middlewares' => [AuthMIddleware::class]
+    'middlewares' => [AuthMiddleware::class]
 ],function($route){
     $route('GET','', "dashboard\HomeController@index");
     $route('GET', "/usuarios", 'dashboard\UsuariosController@index');

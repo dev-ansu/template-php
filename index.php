@@ -10,8 +10,8 @@ use app\core\Core;
 use app\classes\ErrorHandler;
 
 
-require_once __DIR__ . "/src/routes/web.php";
 
+require_once __DIR__ . "/src/routes/web.php";
 $core = new Core();
 
 try{
