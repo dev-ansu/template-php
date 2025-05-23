@@ -2,6 +2,8 @@
 
 namespace app\core;
 
+use app\classes\NotFoundHandler;
+
 class Core{
 
     private string $controller = "app\\controllers\\HomeController";
@@ -26,8 +28,7 @@ class Core{
                 if(isset($url[1]) && file_exists(CONTROLLERS_PATH . $url[0] . "/". ucfirst($url[1]) . "Controller.php")){
                     $this->controller = "app\\controllers\\" . $url[0] ."\\". ucfirst($url[1]) . "Controller";
                 }elseif(isset($url[1]) && !file_exists(CONTROLLERS_PATH . $url[0] . "/". ucfirst($url[1]) . "Controller.php")){
-                    include_once VIEWS_PATH . "/not-found.php";
-                    http_response_code(404);
+                    NotFoundHandler::handle();
                     exit;
                 }else{
                     $this->controller = "app\\controllers\\" . $url[0] . "\\HomeController";
@@ -36,8 +37,7 @@ class Core{
                 
                 $this->controller = "app\\controllers\\" . ucfirst($url[0]) . "Controller";
             }else{
-                include_once VIEWS_PATH . "/not-found.php";
-                http_response_code(404);
+                NotFoundHandler::handle();
                 exit;
             }
                 
