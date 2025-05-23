@@ -96,7 +96,8 @@ class Core{
     private function parseUrl(): array {
         $url = $_SERVER['REQUEST_URI'];
         $base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/'); // Adapta para subdiretórios
-        $url = preg_replace("#^$base#", "", $url);
+        $basePattern = preg_quote($base, '#');
+        $url = preg_replace("#^{$basePattern}#", "", $url);
         $url = explode("?", $url)[0];
         $url = trim($url, "/");
         return $url ? array_filter(explode("/", $url)) : [];
