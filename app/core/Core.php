@@ -65,7 +65,15 @@ class Core{
         //     array_shift($url);
         // }
 
-         if($controllerInstance instanceof \app\contracts\MiddlewareProtected){
+        // Middlewares definidos na ROTA (executados primeiro)
+        foreach ($route['middlewares'] ?? [] as $middleware) {
+            $middlewareInstance = new $middleware();
+            if (!$middlewareInstance->handle()) {
+                return;
+            }
+        }
+
+        if($controllerInstance instanceof \app\contracts\MiddlewareProtected){
             $middlewares = $controllerInstance->middlewareMap();
             if(isset($middlewares[$this->method])){
                 foreach($middlewares[$this->method] as $middleware){
