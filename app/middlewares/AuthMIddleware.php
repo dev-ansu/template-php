@@ -3,7 +3,7 @@ namespace app\middlewares;
 
 use app\classes\Session;
 
-class AuthMIddleware{
+class AuthMiddleware{
 
 
     public static function handle(){
@@ -13,9 +13,10 @@ class AuthMIddleware{
         if(!$session->has(SESSION_LOGIN)){
             setFlash('message', 'Não autorizado');
             http_response_code(403);
-            redirect();
-            exit;
+            redirect("/");
+            return false;
         } 
+        return true;
 
     }
 
