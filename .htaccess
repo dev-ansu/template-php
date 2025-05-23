@@ -1,6 +1,7 @@
 # Impede acesso direto à pasta app/
 RewriteEngine On
 
+RewriteBase /template/
 # Bloqueia qualquer tentativa de acessar /app ou subpastas
 RewriteRule ^app(/|$) - [F,L]
 RewriteRule ^config(/|$) - [F,L]
