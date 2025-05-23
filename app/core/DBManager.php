@@ -9,22 +9,22 @@ class DBManager{
     private static array $connections = [];
 
     public static function connection(string | null $name = null): PDO{
-        $config = require __DIR__ ."/../../config/database.php";
-        $name = $name ?? $config['default'];
-
+        $config = require __DIR__ ."/../../phinx.php";
+        $name = $name ?? $config['environments']['default_environment'];
+        
         if(!isset(self::$connections[$name])){
             try{
 
-                $conn = $config['connections'][$name] ?? null;
+                $conn = $config['environments'][$name] ?? null;
                 
                 if(!$conn){
                     throw new Exception("Configuração de conexão '$name' não encontrada.");
                 }
 
-                switch($conn['driver']){
+                switch($conn['adapter']){
                     case 'mysql':
-                        $dsn = "mysql:host={$conn['host']};dbname={$conn['dbname']};port={$conn['port']};charset={$conn['charset']}";
-                        self::$connections[$name] = new PDO($dsn, $conn['username'], $conn['password']);
+                        $dsn = "{$conn['adapter']}:host={$conn['host']};dbname={$conn['name']};port={$conn['port']};charset={$conn['charset']}";
+                        self::$connections[$name] = new PDO($dsn, $conn['user'], $conn['pass']);
                     break;
                     
                     case 'sqlite':

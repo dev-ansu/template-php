@@ -2,3 +2,4 @@
 vendor
 config/database.php
 storage/uploads
+phinx.php
