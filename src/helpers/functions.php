@@ -170,3 +170,14 @@ function redirect(string | null $to = null): void{
     header("location: " . BASE_URL . $to);
     die;
 }
+
+/**
+ * Define uma rota a ser seguida
+ * @param string $route
+ */
+function route(string $route){
+    if(str_contains($route, ".")){
+        $route = str_replace(".", "/", $route);
+    }
+    return BASE_URL . $route;
+}

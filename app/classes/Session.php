@@ -22,6 +22,10 @@ class Session{
         return $_SESSION[$name] ?? null;
     }
 
+    public static function get($name){
+        return $_SESSION[$name] ?? null;
+    }
+
     public function has($name){
         return isset($_SESSION[$name]);
     }

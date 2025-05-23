@@ -13,34 +13,60 @@ class Core{
       
         if(isset($url[1]) && file_exists(CONTROLLERS_PATH . $url[0] . "/". ucfirst($url[1]) . "Controller.php")){
             
- 
+            
             $this->controller = "app\\controllers\\" . $url[0] . "\\" . ucfirst($url[1]) . "Controller";
             array_shift($url); // remove subpasta
             array_shift($url); // remove o controller
       
             
         }elseif(isset($url[0])){
-
+         
             if(is_dir(CONTROLLERS_PATH . $url[0])){
+                
                 if(isset($url[1]) && file_exists(CONTROLLERS_PATH . $url[0] . "/". ucfirst($url[1]) . "Controller.php")){
                     $this->controller = "app\\controllers\\" . $url[0] ."\\". ucfirst($url[1]) . "Controller";
+                }elseif(isset($url[1]) && !file_exists(CONTROLLERS_PATH . $url[0] . "/". ucfirst($url[1]) . "Controller.php")){
+                    include_once VIEWS_PATH . "/not-found.php";
+                    http_response_code(404);
+                    exit;
                 }else{
                     $this->controller = "app\\controllers\\" . $url[0] . "\\HomeController";
                 }
             }elseif(!is_dir(CONTROLLERS_PATH . $url[0]) && file_exists(CONTROLLERS_PATH . ucfirst($url[0]) . "Controller.php")){
+                
                 $this->controller = "app\\controllers\\" . ucfirst($url[0]) . "Controller";
+            }else{
+                include_once VIEWS_PATH . "/not-found.php";
+                http_response_code(404);
+                exit;
             }
-    
+                
+            
             array_shift($url); // remove o controller
         }
         // instância controller
 
         $controllerInstance = new $this->controller;
 
+       
         // verifica método
         if(isset($url[0]) && method_exists($controllerInstance, $url[0])){
             $this->method = $url[0];
             array_shift($url);
+        }
+
+         if($controllerInstance instanceof \app\contracts\MiddlewareProtected){
+            $middlewares = $controllerInstance->middlewareMap();
+            if(isset($middlewares[$this->method])){
+                foreach($middlewares[$this->method] as $middleware){
+                    if(is_array($middleware)){
+                        [$middlewareClass, $params] = $middleware;
+                        $middlewareClass::handle($params);
+                    }else{
+                        $middleware::handle();
+                    }
+                }
+            }
         }
 
         $this->params = $url;

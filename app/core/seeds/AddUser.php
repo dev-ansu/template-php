@@ -30,6 +30,14 @@ class AddUser extends AbstractSeed
             ]
         ];
         $users = $this->table("usuarios");
-        $users->insert($data)->save();
+        $existingUser = $this->fetchRow("SELECT * FROM usuarios WHERE email = 'anderson@gmail.com'");
+        
+        if($existingUser){
+            $this->execute(
+                'UPDATE usuarios SET foto ="sem-foto.jpg" WHERE email = "anderson@gmail.com"'
+            );
+        }else{
+            $users->insert($data)->save();
+        }
     }
 }
