@@ -19,7 +19,7 @@ class LoginRequest extends RequestValidation{
             'senha' => 'required|notNull',
         ];
     }
-
+    
     public function messages(){
         return [
             'email.notNull' => "O campo e-mail não pode ser vazio.",
