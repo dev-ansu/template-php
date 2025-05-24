@@ -5,17 +5,12 @@ use PDO;
 
 abstract class Model extends DBManager{
     
-    protected $db;
+    protected string | null $name;
     protected string $table;
-
-    public function __construct(string | null $env = null)
-    {
-        $this->db = $this->connection($env);
-    }
  
 
     public function all():array{
-        $stmt = $this->db->prepare("SELECT * FROM {$this->table}");
+        $stmt = $this->connection($this->name)->prepare("SELECT * FROM {$this->table}");
         $stmt->execute();
         return $stmt->fetchAll();
     }

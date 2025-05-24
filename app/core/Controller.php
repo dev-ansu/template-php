@@ -10,10 +10,10 @@ class Controller{
     public function load(string $viewName, array $viewData = []){
 
         $session = [];
+        
         if((new Session)->has(SESSION_LOGIN) && !empty((new Session)->get(SESSION_LOGIN))){
             $session = Session::get(SESSION_LOGIN);
             $viewData['session'] = $session;
-            
         }
         
         try{

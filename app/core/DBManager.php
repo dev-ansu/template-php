@@ -10,8 +10,8 @@ class DBManager{
 
     public static function connection(string | null $name = null): PDO{
         $config = require __DIR__ ."/../../phinx.php";
-        $name = $name ?? $config['environments']['default_environment'];
-        
+
+        $name = !$name ? $config['environments']['default_environment']:$name;
         if(!isset(self::$connections[$name])){
             try{
 
