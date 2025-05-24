@@ -36,12 +36,15 @@ try{
 
     ErrorHandler::log($e); 
     http_response_code(500);
-    echo "Erro interno do servidor (BD).";
+    echo $e->getLine();
+    echo $e->getMessage();
+
 
 }catch(\Throwable $e){
     ErrorHandler::log($e);
+    ErrorHandler::handleException($e);
     http_response_code(500);
-    echo "Erro interno do servidor.";
+
 }
 
 

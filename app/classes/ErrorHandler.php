@@ -16,7 +16,15 @@ class ErrorHandler{
     public static function handleException(Throwable $e){
         error_log($e);
         http_response_code(500);
-        echo 'Erro interno.';
+          $linha = $e->getLine();
+        $mensagem = $e->getMessage();
+        $arquivo = $e->getFile();
+        $traceAsString = $e->getTraceAsString();
+        echo <<<HTML
+            <p>Erro na linha: {$linha} do arquivo {$arquivo}
+            <p>Mensagem: {$mensagem}</p>
+            <p>Stacktrace: {$traceAsString}</p>
+        HTML;
     }
 
     public static function handleError($severity, $message, $file, $line){
