@@ -2,6 +2,7 @@
 namespace app\classes;
 
 use app\core\Model;
+use app\facade\App;
 use DateTime;
 
 class Validate extends Model{
@@ -32,6 +33,9 @@ class Validate extends Model{
             
            
         }
+
+        self::setMessages();
+        
         if(in_array(false, $result, true)){
             return false;
         }
@@ -64,6 +68,7 @@ class Validate extends Model{
     }
     
     private static function patternValues($field, $param){
+       
         $data = isset($_REQUEST[$field]) ? strip_tags($_REQUEST[$field]):'';
         $newParam = [];
 
@@ -164,6 +169,7 @@ class Validate extends Model{
     }
 
     private static function setError($field, $method, $value){
+
         if(!isset(self::$errors[$field])){
             self::$errors[$field] = [$method => $value];
         }else{
@@ -178,8 +184,9 @@ class Validate extends Model{
     }
 
     private static function required($field){
-        $value = isset(self::$method[$field]) ? self::$method[$field]:false;
-
+      
+        $value = App::request()->input($field);
+        
         if(!$value){
             setFlash($field, 'O campo é obrigatório.');
             self::setError($field, 'required','O campo é obrigatório'); 
@@ -206,15 +213,18 @@ class Validate extends Model{
           
     }
     private static function numberInt($field){
-        $number = isset($_REQUEST[$field]) ? intval($_REQUEST[$field]):"";
+        $number = App::request()->input($field);
+     
         if(is_int($number)){
             return $number;
         }        
+        // setFlash($field, "O campo {$field} deve ser um número inteiro.");
+        self::setError($field, 'numberInt', "O campo {$field} deve ser um número inteiro."); 
         return null;
     }
 
     private static function numberFloat($field){
-        $number = isset($_REQUEST[$field]) ? floatval($_REQUEST[$field]):"";
+        $number = App::request()->input($field);
         if(is_float($number)){
             return $number;
         }        
@@ -222,10 +232,10 @@ class Validate extends Model{
     }
 
     private static function notNull($field){
-        $value = isset(self::$method[$field]) ? self::$method[$field]:false;
+        $value = App::request()->input($field);
         
         if(empty(trim($value)) || trim($value) == ''){
-            setFlash($field, 'O campo não estar vazio.');
+            setFlash($field, 'O campo não está vazio.');
             self::setError($field, 'notNull', 'O campo não pode ser vazio.'); 
             return false;
         }
