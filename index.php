@@ -13,6 +13,7 @@ use app\contracts\Controller;
 use app\core\Container;
 use app\core\Controller as CoreController;
 use app\facade\App;
+use app\services\Request;
 
 // use DI\ContainerBuilder;
 
@@ -23,9 +24,10 @@ $services = __DIR__ . "/app/core/services/services.php";
 // $builder = new ContainerBuilder();
 // $builder->addDefinitions($services);
 // $container = $builder->build();
+$request = Request::create();
 
 $container = new Container();
-$container = $container->build();
+$container = $container->build(['services']);
 App::setContainer($container);
 $core = new Core($container);
 

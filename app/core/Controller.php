@@ -1,21 +1,12 @@
 <?php
 
 namespace app\core;
-
-use app\services\AuthSessionService;
 use Exception;
 
 class Controller{
-
-    public function __construct(
-        protected AuthSessionService $session
-    )
-    {
-        
-    }
     
     public function load(string $viewName, array $viewData = []){
-
+        
         try{
             $keys = array_keys($viewData);
 

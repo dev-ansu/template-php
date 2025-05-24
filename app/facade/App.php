@@ -2,6 +2,7 @@
 namespace app\facade;
 
 use app\services\AuthSessionService;
+use app\services\Request;
 use DI\Container;
 
 class App{
@@ -27,6 +28,10 @@ class App{
        */
       public static function session(): AuthSessionService{
         return self::get(AuthSessionService::class);
+      }
+
+      public static function request(): Request{
+        return self::get(Request::class);
       }
 
       

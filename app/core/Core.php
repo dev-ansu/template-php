@@ -3,6 +3,7 @@
 namespace app\core;
 
 use app\classes\NotFoundHandler;
+use app\services\Request;
 use DI\Container;
 
 class Core{
