@@ -43,16 +43,18 @@ class Router{
         foreach(self::$routes[$requestMethod] as $route => $action){
           
             // Converte "{id:\d+}" em "(?P<id>\d+)" e "{slug}" em "(?P<slug>[^/]+)"
+            // Converte uma rota com parâmetros nomeados (ex.: /user/{id}) em uma expressão regular.
+            // A regex resultante permite extrair os valores dos parâmetros da URL real
             $pattern = preg_replace_callback(
                 '/\{(\w+)(?::([^}]+))?\}/',
                 function ($matches) {
-                    $paramName = $matches[1];
-                    $regexPattern = $matches[2] ?? '[^/]+'; // Padrão padrão: qualquer coisa exceto /
-                    return "(?P<{$paramName}>{$regexPattern})";
+                    $paramName = $matches[1]; // Nome do parâmetro (ex.: id)
+                    $regexPattern = $matches[2] ?? '[^/]+'; // Se não houver regex definida, aceita qualquer coisa menos "/"
+                    return "(?P<{$paramName}>{$regexPattern})"; // Cria o grupo para capturar o valor da URL
                 },
-                ltrim($route, '/')
+                ltrim($route, '/') // Remove a barra inicial da rota
             );
-
+            // Finaliza o padrão regex adicionando delimitadores e âncoras de início/fim.
             $pattern = "#^{$pattern}$#";
             
             if(preg_match($pattern, $url, $matches)){
