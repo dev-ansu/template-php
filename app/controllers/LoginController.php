@@ -3,18 +3,19 @@
 namespace app\controllers;
 
 use app\classes\CSRFToken;
+use app\core\Controller;
 use app\requests\LoginRequest;
 use app\services\Auth\AuthService;
 use app\services\AuthSessionService;
 
-class LoginController{
+class LoginController extends Controller{
 
     public function __construct(
-        protected AuthSessionService $session,
+        AuthSessionService $session,
         protected LoginRequest $loginRequest
     )
     {
-        
+        parent::__construct($session);   
     }
     
     public function index(){
@@ -42,7 +43,7 @@ class LoginController{
                 redirect();
             }
 
-            $this->session::init($user);
+            $this->session->init($user);
                         
             $csrf->invalidateToken();
 
