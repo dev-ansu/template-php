@@ -11,7 +11,7 @@
         <div class="flex flex-col gap-4">
             <div class="flex flex-col flex-1">
                 <label for="" class="text-gray-600">E-mail:</label>
-                <input  type="email" name="email" value="" class="outline-none border-1 border-orange-500 rounded px-2 py-1" placeholder="Digite seu e-mail">
+                <input  type="email" name="email" value="<?= getOld("email") ?>" class="outline-none border-1 border-orange-500 rounded px-2 py-1" placeholder="Digite seu e-mail">
                 <?= getFlash("email.required", true) ?>
                 <?= getFlash("email.notNull", true) ?>
             </div>
