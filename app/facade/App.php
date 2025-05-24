@@ -1,6 +1,7 @@
 <?php
 namespace app\facade;
 
+use app\classes\Session;
 use app\services\AuthSessionService;
 use app\services\Request;
 use DI\Container;
@@ -32,6 +33,10 @@ class App{
 
       public static function request(): Request{
         return self::get(Request::class);
+      }
+
+      public static function session(): Session{
+        return self::get(Session::class);
       }
 
       
