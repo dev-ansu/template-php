@@ -26,7 +26,7 @@ class App{
       /**
        * Atalho para o serviço da sessão
        */
-      public static function session(): AuthSessionService{
+      public static function authSession(): AuthSessionService{
         return self::get(AuthSessionService::class);
       }
 
