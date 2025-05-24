@@ -2,6 +2,7 @@
 
 use app\core\Router;
 use app\middlewares\AuthMiddleware;
+use app\middlewares\CSRFMiddleware;
 
 Router::group([
     'prefix' => '/dashboard',
@@ -15,5 +16,6 @@ Router::get("/", 'HomeController@index');
 // Router::get("/dashboard", 'dashboard\HomeController@index', [AuthMIddleware::class]);
 
 Router::get("/user/{id}", 'UserController@index');
-Router::post("/login", 'LoginController@index');
+
+Router::post("/login", 'LoginController@index', [CSRFMiddleware::class]);
 Router::get("/logout", 'LoginController@logout');
