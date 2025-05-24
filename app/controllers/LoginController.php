@@ -4,18 +4,17 @@ namespace app\controllers;
 
 use app\classes\CSRFToken;
 use app\core\Controller;
+use app\facade\App;
 use app\requests\LoginRequest;
 use app\services\Auth\AuthService;
-use app\services\AuthSessionService;
 
 class LoginController extends Controller{
 
     public function __construct(
-        AuthSessionService $session,
-        protected LoginRequest $loginRequest
+        protected LoginRequest $loginRequest,
+        protected AuthService $auth
     )
     {
-        parent::__construct($session);   
     }
     
     public function index(){
@@ -36,14 +35,14 @@ class LoginController extends Controller{
             }
             
             $data = $request->data();
-            $user = (new AuthService)->execute($data);
+            $user = $this->auth->execute($data);
             
             if(!$user){
                 setFlash("message", 'E-mail ou senha incorretos.');
                 redirect();
             }
 
-            $this->session->init($user);
+            App::session()->init($user);
                         
             $csrf->invalidateToken();
 
@@ -54,7 +53,7 @@ class LoginController extends Controller{
 
 
     public function logout(){
-        $this->session->end();
+        App::session()->end();
         redirect("/");
     }
 
