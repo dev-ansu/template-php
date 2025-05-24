@@ -7,7 +7,7 @@ abstract class Model extends DBManager{
     
     protected string | null $name;
     protected string $table;
- 
+    protected array $columns = [];
 
     public function all():array{
         $stmt = $this->connection($this->name)->prepare("SELECT * FROM {$this->table}");
@@ -19,7 +19,7 @@ abstract class Model extends DBManager{
         
         $key = $this->validateColumn($key);
 
-        $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE {$key} = :{$key}");
+        $stmt = $this->connection($this->name)->prepare("SELECT * FROM {$this->table} WHERE {$key} = :{$key}");
         $stmt->execute(["$key" => $value]);
         $result = $stmt->fetch();
         return $result ?: null;
@@ -29,7 +29,8 @@ abstract class Model extends DBManager{
     public function delete($key, $value): bool
     {   
         $key = $this->validateColumn($key);
-        $stmt = $this->db->prepare("DELETE FROM {$this->table} WHERE {$key} = :{$key}");
+        
+        $stmt = $this->connection($this->name)->prepare("DELETE FROM {$this->table} WHERE {$key} = :{$key}");
         return $stmt->execute(["$key" => $value]);
     }
 
@@ -39,7 +40,7 @@ abstract class Model extends DBManager{
         $set = implode(", ", array_map(fn($field) => "$field = :$field", $fields));
         $data['id'] = $id;
 
-        $stmt = $this->db->prepare("UPDATE {$this->table} SET $set WHERE id = :id");
+        $stmt = $this->connection($this->name)->prepare("UPDATE {$this->table} SET $set WHERE id = :id");
         return $stmt->execute($data);
     }
 
@@ -48,7 +49,7 @@ abstract class Model extends DBManager{
         $columns = implode(", ", array_keys($data));
         $placeholders = implode(", ", array_map(fn($key) => ":$key", array_keys($data)));
 
-        $stmt = $this->db->prepare("INSERT INTO {$this->table} ($columns) VALUES ($placeholders)");
+        $stmt = $this->connection($this->name)->prepare("INSERT INTO {$this->table} ($columns) VALUES ($placeholders)");
         return $stmt->execute($data);
     }
 
@@ -57,7 +58,12 @@ abstract class Model extends DBManager{
         if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $key)) {
             throw new \InvalidArgumentException("Coluna inválida: $key");
         }
+        if (!in_array($key, $this->columns)) {
+            throw new \InvalidArgumentException("Coluna inválida: $key");
+        }
         return $key;
     }
+
+
 
 }
