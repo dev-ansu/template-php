@@ -12,6 +12,7 @@ use app\contracts\AuthSessionService;
 use app\contracts\Controller;
 use app\core\Container;
 use app\core\Controller as CoreController;
+use app\facade\App;
 
 // use DI\ContainerBuilder;
 
@@ -25,7 +26,7 @@ $services = __DIR__ . "/app/core/services/services.php";
 
 $container = new Container();
 $container = $container->build();
-
+App::setContainer($container);
 $core = new Core($container);
 
 try{
