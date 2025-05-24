@@ -1,5 +1,8 @@
 <?php
 
+use app\classes\Session;
+use app\facade\App;
+
 /** Carrega um recurso
  * @param string $resource - recurso a ser carregado
  * @return string
@@ -25,6 +28,33 @@ function component(string $componentName, array $componentData = []): void{
         include $file;        
     }
 
+}
+
+function setOld(string $key, mixed $value): void{
+    $session = new Session;
+
+    if(!$session->has($key) && empty($session->get($key))){
+        $key = escape($key);
+        $value = escape($value);
+        $session->__set($key, $value);
+    }
+
+}
+
+function getOld(string $key){
+    $session = new Session;
+
+    if($session->has($key) && !empty($session->get($key))){
+        $key = escape($key);
+        
+        $old = $session->__get($key);
+
+        $session->unset($key);
+
+        $old = escape($old);
+
+        return $old;
+    }
 }
 
 /**
@@ -221,5 +251,5 @@ function route(string $route){
  * @return string
  */
 function escape($value): string{
-    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+    return is_string($value) ? htmlspecialchars($value, ENT_QUOTES, 'UTF-8'):$value;
 }
