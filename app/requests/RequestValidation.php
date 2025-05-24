@@ -3,9 +3,9 @@
 namespace app\requests;
 
 use app\classes\Validate;
-use app\contracts\Request as ContractsRequest;
 
-class Request extends Validate implements ContractsRequest{
+
+class RequestValidation extends Validate{
 
     private $data;
 

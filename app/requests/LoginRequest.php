@@ -1,9 +1,9 @@
 <?php
 
 namespace app\requests;
-use app\requests\Request;
+use app\requests\RequestValidation;
 
-class LoginRequest extends Request{
+class LoginRequest extends RequestValidation{
 
     public function __construct(){
         parent::__construct();
