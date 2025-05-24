@@ -20,7 +20,7 @@ class CSRFMiddleware implements CSRFMiddlewareContract{
 
         $token = App::request()->getPost($this->csrftoken->getTokenName());
         
-        if(!$token || $this->csrftoken->validateToken($token)){
+        if(!$token || !$this->csrftoken->validateToken($token)){
             $this->denyAccess();
             return false;
         }
