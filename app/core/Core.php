@@ -62,7 +62,6 @@ class Core{
 
         $this->controller = $route['controller'];
         $controller = $this->container->get($this->controller);
-        
         $this->method = $route['method'];
         $this->params = $route['params'];
        

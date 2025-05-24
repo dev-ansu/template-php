@@ -8,11 +8,10 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ );
 $dotenv->load();
 use app\core\Core;
 use app\classes\ErrorHandler;
+use app\contracts\AuthSessionService;
 use app\contracts\Controller;
-use app\contracts\Request;
 use app\core\Container;
 use app\core\Controller as CoreController;
-use app\requests\Request as RequestsRequest;
 
 // use DI\ContainerBuilder;
 
@@ -25,9 +24,7 @@ $services = __DIR__ . "/app/core/services/services.php";
 // $container = $builder->build();
 
 $container = new Container();
-
-$container->bind(Controller::class, CoreController::class);
-$container = $container->build(['services']);
+$container = $container->build();
 
 $core = new Core($container);
 

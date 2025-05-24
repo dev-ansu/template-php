@@ -2,29 +2,29 @@
 namespace app\services;
 
 use app\classes\Session;
+use app\contracts\AuthSessionService as ContractsAuthSessionService;
 use stdClass;
 
-class AuthSessionService{
+class AuthSessionService implements ContractsAuthSessionService{
     
-    protected static Session $session;
-    protected static stdClass $data;
+    protected stdClass $data;
 
-    public function __construct()
+    public function __construct(protected Session $session)
     {
-        self::$session = new Session;
+       
     }
 
-    public static function init(array| object $data){
-       self::$session->__set(SESSION_LOGIN, $data);        
+    public function init(array| object $data){
+       $this->session->__set(SESSION_LOGIN, $data);        
     }
     
-    public static function get(){
-        self::$data = self::$session->__get(SESSION_LOGIN);         
-        return self::$data;
+    public function get(){
+        $this->data = $this->session->__get(SESSION_LOGIN);         
+        return $this->data;
     }
 
-    public static function end(){
-        return self::$session->unset(SESSION_LOGIN);
+    public function end(){
+        return $this->session->unset(SESSION_LOGIN);
     }
 
 }

@@ -7,7 +7,9 @@ use Exception;
 
 class Controller{
 
-    public function __construct(protected AuthSessionService $session)
+    public function __construct(
+        protected AuthSessionService $session
+    )
     {
         
     }

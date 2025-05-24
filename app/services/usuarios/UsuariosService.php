@@ -3,13 +3,14 @@
 namespace app\services\usuarios;
 
 use app\core\DBManager;
+use app\core\Model;
 
-class UsuariosService extends DBManager{
+class UsuariosService extends Model{
     
-    protected $table = 'usuarios';
 
-    public function execute(string $email){
-        $sql = "SELECT * FROM {$this->table} WHERE email = :email";
+    public function __construct(string | null $env = '')
+    {
+        $this->table = 'usuarios';
+        $this->name = $env;
     }
-
 }
