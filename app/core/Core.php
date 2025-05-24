@@ -74,7 +74,7 @@ class Core{
 
         // Middlewares definidos na ROTA (executados primeiro)
         foreach ($route['middlewares'] ?? [] as $middleware) {
-            $middlewareInstance = new $middleware();
+            $middlewareInstance = $this->container->get($middleware);
             if (!$middlewareInstance->handle()) {
                 return;
             }

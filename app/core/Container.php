@@ -18,6 +18,7 @@ class Container{
         $container = new ContainerBuilder();
         // Mescla todas as definições
         $definitions = [];
+      
         foreach ($this->services as $service) {
             if (is_array($service)) {
                 $definitions = array_merge($definitions, $service);
@@ -28,8 +29,8 @@ class Container{
                 }
             }
         }
-        
-        $container->addDefinitions(...$this->services);
+ 
+        $container->addDefinitions($definitions);
         return $container->build();
     }
 

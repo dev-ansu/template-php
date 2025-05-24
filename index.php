@@ -6,13 +6,17 @@ require_once __DIR__ . "/config/config.php";
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ );
 $dotenv->load();
+
+use app\classes\CSRFToken;
 use app\core\Core;
 use app\classes\ErrorHandler;
 use app\contracts\AuthSessionService;
 use app\contracts\Controller;
+use app\contracts\CSRFMiddlewareContract;
 use app\core\Container;
 use app\core\Controller as CoreController;
 use app\facade\App;
+use app\middlewares\CSRFMiddleware;
 use app\services\Request;
 
 // use DI\ContainerBuilder;
@@ -28,6 +32,7 @@ $request = Request::create();
 
 $container = new Container();
 $container = $container->build(['services']);
+
 App::setContainer($container);
 $core = new Core($container);
 

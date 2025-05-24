@@ -19,6 +19,10 @@ class CSRFToken{
 
     }
 
+    public function getTokenName(){
+        return $this->tokenName; 
+    }
+
     // Gera e armazena um token na sessão
     public function generateToken(): string{
         $token = bin2hex(random_bytes(32));
