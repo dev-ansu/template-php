@@ -31,7 +31,7 @@ function component(string $componentName, array $componentData = []): void{
 }
 
 function setOld(string $key, mixed $value): void{
-    $session = new Session;
+    $session = App::session();
 
     if(!$session->has($key) && empty($session->get($key))){
         $key = escape($key);
@@ -42,11 +42,11 @@ function setOld(string $key, mixed $value): void{
 }
 
 function getOld(string $key){
-    $session = new Session;
+    $session = App::session();
 
     if($session->has($key) && !empty($session->get($key))){
         $key = escape($key);
-        
+
         $old = $session->__get($key);
 
         $session->unset($key);

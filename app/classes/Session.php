@@ -1,8 +1,9 @@
 <?php
 namespace app\classes;
 
+use app\contracts\SessionContract;
 
-class Session{
+class Session implements SessionContract{
 
     public function __construct()
     {
