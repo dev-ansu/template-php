@@ -42,7 +42,7 @@ class LoginController extends Controller{
                 redirect();
             }
 
-            App::session()->init($user);
+            App::authSession()->init($user);
                         
             $csrf->invalidateToken();
 
@@ -53,7 +53,7 @@ class LoginController extends Controller{
 
 
     public function logout(){
-        App::session()->end();
+        App::authSession()->end();
         redirect("/");
     }
 
