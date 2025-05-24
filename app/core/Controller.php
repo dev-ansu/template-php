@@ -6,26 +6,28 @@ use Exception;
 class Controller{
     
     public function load(string $viewName, array $viewData = []){
-        
         try{
-            $keys = array_keys($viewData);
-
-            if(!in_array('view', $keys)){
-                throw new Exception('É obrigatório passar uma view.');
+            // Validação do caminho da view
+            $viewPath = realpath(VIEWS_PATH . $viewName . ".php");
+            $viewsDir = realpath(VIEWS_PATH);
+            if(strpos($viewPath, $viewsDir) !== 0 || !file_exists($viewPath)){
+                throw new Exception('View não encontrada');
             }
+            $safeData = array_map(function($item){
+                return is_string($item) ? htmlspecialchars($item, ENT_QUOTES, 'UTF-8'): $item;
+            }, $viewData);
             
-        
-            if(!file_exists(VIEWS_PATH . $viewName . ".php")){
-                throw new Exception('Não foi possível encontrar a view informada.');
-            }
-            
-            extract($viewData);
+            extract($safeData);
 
-            include  VIEWS_PATH . $viewName . ".php";
+            include $viewPath;
 
         }catch(Exception $e){
             
-            echo $e->getMessage();
+             // Log do erro em produção
+            error_log($e->getMessage());
+            
+            // Mensagem genérica em produção
+            echo "Ocorreu um erro ao carregar a página.";
 
         }
 
