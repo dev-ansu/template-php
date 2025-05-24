@@ -14,7 +14,7 @@ class Controller{
                 throw new Exception('View não encontrada');
             }
             $safeData = array_map(function($item){
-                return is_string($item) ? htmlspecialchars($item, ENT_QUOTES, 'UTF-8'): $item;
+                return is_string($item) ? escape($item): $item;
             }, $viewData);
             
             extract($safeData);

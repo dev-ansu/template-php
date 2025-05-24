@@ -13,13 +13,17 @@ function asset(string $resource): string {
  * @param array $componentData - o dados a serem impressos no componente
  */
 function component(string $componentName, array $componentData = []): void{
-        
-    if(str_contains($componentName, ".")){
-        $componentName = str_replace(".", "\\", $componentName);
+    $name = escape($componentName);
+    if(str_contains($name, ".")){
+        $name = str_replace(".", "\\", $name);
     }
 
-    extract($componentData);
-    include_once COMPONENTS_PATH . $componentName . ".php";
+    $file = COMPONENTS_PATH . "{$name}.php";
+
+    if(file_exists($file)){
+        extract($componentData);
+        include $file;        
+    }
 
 }
 
@@ -209,4 +213,13 @@ function route(string $route){
         $route = str_replace(".", "/", $route);
     }
     return BASE_URL . $route;
+}
+
+/**
+ * Função para escapar dados
+ * @param string $value
+ * @return string
+ */
+function escape($value): string{
+    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 }
