@@ -6,6 +6,7 @@ class Router{
     
     private static array $routes = [];
     
+    
     public static function get(string $route, string $action, array $middlewares = []):void{
         self::$routes['GET'][$route] = [
          'action' =>  $action,

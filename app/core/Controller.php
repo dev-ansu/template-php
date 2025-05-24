@@ -2,20 +2,18 @@
 
 namespace app\core;
 
-use app\classes\Session;
+use app\services\AuthSessionService;
 use Exception;
 
 class Controller{
+
+    public function __construct(protected AuthSessionService $session)
+    {
+        
+    }
     
     public function load(string $viewName, array $viewData = []){
 
-        $session = [];
-        
-        if((new Session)->has(SESSION_LOGIN) && !empty((new Session)->get(SESSION_LOGIN))){
-            $session = Session::get(SESSION_LOGIN);
-            $viewData['session'] = $session;
-        }
-        
         try{
             $keys = array_keys($viewData);
 

@@ -3,12 +3,18 @@
 namespace app\core;
 
 use app\classes\NotFoundHandler;
+use DI\Container;
 
 class Core{
 
     private string $controller = "app\\controllers\\HomeController";
     private string $method = 'index';
     private array $params = [];
+ 
+    public function __construct(private Container $container)
+    {
+        $this->container = $container;
+    }
 
     public function run(){
         // $url = $this->parseUrl();
@@ -55,7 +61,8 @@ class Core{
         // instância controller
 
         $this->controller = $route['controller'];
-        $controllerInstance = new $this->controller;
+        $controller = $this->container->get($this->controller);
+        
         $this->method = $route['method'];
         $this->params = $route['params'];
        
@@ -73,8 +80,8 @@ class Core{
             }
         }
 
-        if($controllerInstance instanceof \app\contracts\MiddlewareProtected){
-            $middlewares = $controllerInstance->middlewareMap();
+        if($controller instanceof \app\contracts\MiddlewareProtected){
+            $middlewares = $controller->middlewareMap();
             if(isset($middlewares[$this->method])){
                 foreach($middlewares[$this->method] as $middleware){
                     if(is_array($middleware)){
@@ -88,8 +95,8 @@ class Core{
         }
 
         // $this->params = $url;
-
-        call_user_func_array([new $this->controller, $this->method], $this->params);
+    
+        call_user_func_array([$controller, $this->method], $this->params);
 
     }
 

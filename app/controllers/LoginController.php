@@ -3,11 +3,19 @@
 namespace app\controllers;
 
 use app\classes\CSRFToken;
-use app\classes\Session;
 use app\requests\LoginRequest;
 use app\services\Auth\AuthService;
+use app\services\AuthSessionService;
 
 class LoginController{
+
+    public function __construct(
+        protected AuthSessionService $session,
+        protected LoginRequest $loginRequest
+    )
+    {
+        
+    }
     
     public function index(){
         $csrf = new CSRFToken();
@@ -19,12 +27,13 @@ class LoginController{
                 redirect();
                 die('CSRF token inválido ou expirado!');
             }
-            $request = (new LoginRequest)->validated();
+            $request = $this->loginRequest->validated();
            
             if(!$request){
                 redirect();
                 exit;
             }
+            
             $data = $request->data();
             $user = (new AuthService)->execute($data);
             
@@ -33,8 +42,7 @@ class LoginController{
                 redirect();
             }
 
-            $session = new Session;
-            $session->__set(SESSION_LOGIN, $user);
+            $this->session::init($user);
                         
             $csrf->invalidateToken();
 
@@ -45,8 +53,7 @@ class LoginController{
 
 
     public function logout(){
-        $session = new Session;
-        $session->unset(SESSION_LOGIN);
+        $this->session->end();
         redirect("/");
     }
 
