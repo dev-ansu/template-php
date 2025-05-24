@@ -3,14 +3,14 @@
 namespace app\requests;
 
 use app\classes\Validate;
-
+use app\facade\App;
 
 class RequestValidation extends Validate{
 
     private $data;
 
     public function __construct(){
-        self::$method = $_SERVER['REQUEST_METHOD'] === 'GET' ? $_GET : $_POST;
+        self::$method = App::request()->getServer('REQUEST_METHOD') === 'GET' ? $_GET : $_POST;
         self::$request = $this;
     }
 
